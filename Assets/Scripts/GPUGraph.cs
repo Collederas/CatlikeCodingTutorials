@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class GPUGraph : MonoBehaviour
 {
+    [SerializeField] ComputeShader computeShader;
+    [SerializeField] Material material;
+    [SerializeField] Mesh mesh;
     [SerializeField, Range(10, 200)] int resolution = 10;
     [SerializeField] FunctionLibrary.FunctionName function;
     [SerializeField] TransitionMode transitionMode;
     [SerializeField, Min(0f)] float functionDuration = 1f, transitionDuration = 1f;
-    [SerializeField] ComputeShader computeShader;
 
     private ComputeBuffer positionsBuffer;
 
-    private static readonly int positionsId = Shader.PropertyToID("_Property");
+    private static readonly int positionsId = Shader.PropertyToID("_Positions");
     private static readonly int resolutionId = Shader.PropertyToID("_Resolution");
     private static readonly int timeId = Shader.PropertyToID("_Time");
     private static readonly int stepId = Shader.PropertyToID("_Step");
@@ -47,6 +49,9 @@ public class GPUGraph : MonoBehaviour
 
         int groups = Mathf.CeilToInt(resolution / 8f);
         computeShader.Dispatch(0, groups, groups, 1);
+
+        Bounds bounds = new Bounds(Vector3.zero, Vector3.one * (2f + step));
+        Graphics.DrawMeshInstancedProcedural(mesh, 0, material, bounds, positionsBuffer.count);
     }
     
     void Update()
