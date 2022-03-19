@@ -246,12 +246,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   computeShader: {fileID: 7200000, guid: db86a7d9144dd4f5195f2cc77800488e, type: 3}
-  material: {fileID: 2100000, guid: 5f2ad4e72efcb48179655c5d1549dbf7, type: 2}
+  material: {fileID: 2100000, guid: 0da64a3aec58a4caeb79e1aecaee2bf9, type: 2}
   mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  resolution: 10
+  resolution: 400
   function: 0
   transitionMode: 0
-  functionDuration: 1
+  functionDuration: 1000
   transitionDuration: 1
 --- !u!4 &909556111
 Transform:
@@ -413,7 +413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointPrefab: {fileID: 3316891381891349844, guid: f74ef462f12504a07a4d97e03afa6719, type: 3}
-  resolution: 100
+  resolution: 175
   function: 0
   transitionMode: 0
   functionDuration: 1

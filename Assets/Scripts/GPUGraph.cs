@@ -5,7 +5,7 @@ public class GPUGraph : MonoBehaviour
     [SerializeField] ComputeShader computeShader;
     [SerializeField] Material material;
     [SerializeField] Mesh mesh;
-    [SerializeField, Range(10, 200)] int resolution = 10;
+    [SerializeField, Range(10, 1000)] int resolution = 10;
     [SerializeField] FunctionLibrary.FunctionName function;
     [SerializeField] TransitionMode transitionMode;
     [SerializeField, Min(0f)] float functionDuration = 1f, transitionDuration = 1f;
@@ -29,7 +29,7 @@ public class GPUGraph : MonoBehaviour
     FunctionLibrary.FunctionName transitionFunction;
 
     private void OnEnable()
-    {
+    {   
         positionsBuffer = new ComputeBuffer(resolution * resolution, 3 * 4);
     }
 
@@ -45,10 +45,14 @@ public class GPUGraph : MonoBehaviour
         computeShader.SetFloat(stepId, step);
         computeShader.SetInt(resolutionId, resolution);
         computeShader.SetFloat(timeId, Time.time);
-        computeShader.SetBuffer(0, positionsId, positionsBuffer);
+
+        computeShader.SetBuffer((int)function, positionsId, positionsBuffer);
+        
+        material.SetBuffer(positionsId, positionsBuffer);
+        material.SetFloat(stepId, step);
 
         int groups = Mathf.CeilToInt(resolution / 8f);
-        computeShader.Dispatch(0, groups, groups, 1);
+        computeShader.Dispatch((int)function, groups, groups, 1);
 
         Bounds bounds = new Bounds(Vector3.zero, Vector3.one * (2f + step));
         Graphics.DrawMeshInstancedProcedural(mesh, 0, material, bounds, positionsBuffer.count);
